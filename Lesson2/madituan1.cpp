@@ -2,7 +2,7 @@
 #include <math.h>
 using namespace std;
 
-int n, a[64][64] = {0};
+int n, a[50][50] = {0};
 int x[8] = {2, 2, 1, 1, -1, -1, -2, -2};
 int y[8] = {1, -1, 2, -2, 2, -2, 1, -1};
 
@@ -12,7 +12,7 @@ void out()
     {
         for (int j = 1; j <= n; j++)
         {
-            cout << a[i][j] << " ";
+            cout << a[i][j] << "\t";
         }
         cout << endl;
     }

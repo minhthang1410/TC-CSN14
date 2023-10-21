@@ -1,17 +1,46 @@
 #include <iostream>
+
 using namespace std;
 
 const int N = 8;
-int board[N][N]; // Bàn cờ
-int moves[8][2] = {{2, 1}, {1, 2}, {-1, 2}, {-2, 1}, {-2, -1}, {-1, -2}, {1, -2}, {2, -1}};
-bool check = false;
+int board[N][N];
+int moveX[] = {2, 1, -1, -2, -2, -1, 1, 2};
+int moveY[] = {1, 2, 2, 1, -1, -2, -2, -1};
 
-bool isValidMove(int x, int y)
+bool isSafe(int x, int y)
 {
-    return (x >= 0 && x < N && y >= 0 && y < N);
+    return (x >= 0 && y >= 0 && x < N && y < N && board[x][y] == -1);
 }
 
-void printBoard()
+bool solveKT(int x, int y, int moveCount)
+{
+    if (moveCount == N * N)
+    {
+        return true;
+    }
+
+    for (int i = 0; i < 8; i++)
+    {
+        int nextX = x + moveX[i];
+        int nextY = y + moveY[i];
+
+        if (isSafe(nextX, nextY))
+        {
+            board[nextX][nextY] = moveCount;
+            if (solveKT(nextX, nextY, moveCount + 1))
+            {
+                return true;
+            }
+            else
+            {
+                board[nextX][nextY] = -1;
+            }
+        }
+    }
+    return false;
+}
+
+void printSolution()
 {
     for (int i = 0; i < N; i++)
     {
@@ -21,7 +50,6 @@ void printBoard()
         }
         cout << endl;
     }
-    cout << "--------------------------------" << endl;
 }
 
 void init()
@@ -30,53 +58,38 @@ void init()
     {
         for (int j = 0; j < N; j++)
         {
-            board[i][j] = 0;
-        }
-    }
-}
-
-void knightTour(int step, int i, int j)
-{
-    int inext, jnext;
-    for (int n = 0; n < N; n++)
-    {
-        inext = i + moves[n][0];
-        jnext = j + moves[n][1];
-        if (isValidMove(inext, jnext) && board[inext][jnext] == 0)
-        {
-            board[inext][jnext] = step + 1;
-            if (step == N * N - 1)
-            {
-                check = true;
-            }
-            else
-            {
-                knightTour(step + 1, inext, jnext);
-                if (!check)
-                {
-                    board[inext][jnext] = 0;
-                }
-            }
+            board[i][j] = -1;
         }
     }
 }
 
 int main()
 {
-    int i = 0;
-    int j = 2;
-
     init();
-    board[i][j] = 1;
-    printBoard();
-    knightTour(1, i, j);
-    if (check)
+
+    int startX, startY;
+    cout << "Nhap toa do xuat phat (0-7) x: ";
+    cin >> startX;
+    cout << "Nhap toa do xuat phat (0-7) y: ";
+    cin >> startY;
+
+    if (startX < 0 || startY < 0 || startX >= N || startY >= N)
     {
-        printBoard();
+        cout << "Toa do khong hop le." << endl;
+        return 1;
+    }
+
+    board[startX][startY] = 0;
+
+    if (solveKT(startX, startY, 1))
+    {
+        cout << "Loi giai co the nhu sau:" << endl;
+        printSolution();
     }
     else
     {
-        cout << "Không có lời giải" << endl;
+        cout << "Khong co loi giai." << endl;
     }
+
     return 0;
 }

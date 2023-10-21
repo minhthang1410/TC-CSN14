@@ -77,8 +77,6 @@ int main()
 
     int trong_luong_toi_da = 23;
 
-    int a[i][j];
-
     ChonMonHang(danh_sach_mon_hang, danh_sach_mon_hang.size(), trong_luong_toi_da);
 
     return 0;
