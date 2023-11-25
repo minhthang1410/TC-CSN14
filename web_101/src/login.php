@@ -1,6 +1,10 @@
 <?php
-    $db = new mysqli('localhost', 'admin', 'password', 'myDB');
-    var_dump($db);
+    $db = new mysqli('db', 'admin', 'password', 'myDB');
+    $sql = "SELECT * FROM users";
+    $result = $db->query($sql);
+    foreach ($result as $row) {
+        printf("%s (%s) (%s)\n", $row["id"], $row["username"], $row["password"]);
+    }
 ?>
 
 <!DOCTYPE html>
